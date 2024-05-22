@@ -9,8 +9,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from urllib.parse import urlparse, parse_qs
 
-# Create your views here.
+
 class HomePage(LoginRequiredMixin,View):
     def get(self,request):
         
@@ -32,11 +33,16 @@ class Login(View):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('/')
+                next_url = request.POST.get('next', request.GET.get('next', '/'))
+                netloc = urlparse(next_url).netloc
+                if netloc: 
+                    next_url = '/'  
+                return redirect(next_url)
             else:
                 messages.error(request,'404 ---- User With Given Credentials Was not found!')
                 return render(request, 'login.html')
     
+
 class Signup(View):
     def get(self,request):
         return render(request,'signup.html')
@@ -61,8 +67,6 @@ class Signup(View):
                 except Exception as e:
                     messages.error(request,e)
                     return redirect('/signup')
-
-
     
 def Logout(request):
     logout(request)
