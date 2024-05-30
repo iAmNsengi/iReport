@@ -10,6 +10,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from urllib.parse import urlparse, parse_qs
+from .models import *
+from django.contrib.auth.decorators import login_required
 
 
 class HomePage(LoginRequiredMixin,View):
@@ -19,8 +21,47 @@ class HomePage(LoginRequiredMixin,View):
     
 class Dashboard(LoginRequiredMixin,View):
     def get(self,request):
-    
-        return render(request,'dashboard.html')
+        me = User.objects.filter(username = request.user).first()
+        myStudents = Student.objects.filter(creator = me).all()
+        my_classes = TheClass.objects.filter(creator = me).all()
+
+
+        context ={
+            "my_students":myStudents,
+            'my_classes':my_classes,
+        }
+        return render(request,'dashboard.html',context)
+
+@login_required
+def AddStudent(request):
+            print('It is getting here')
+            if request.method =='POST':
+                fname = request.POST.get('fname')
+                lname = request.POST.get('lname') 
+                current_class = request.POST.get('current_class')
+                print(request)
+                print(lname)
+                print(current_class)
+
+                if current_class:
+                    try:
+                        class_exist = TheClass.objects.get(code = current_class)
+                        me = User.objects.get(username = request.user)
+                        new_student = Student(creator=me,first_name=fname,last_name=lname,current_class=class_exist)
+                        new_student.save()
+                        messages.success(request,'Student registered successfully!')
+                        return redirect('/dashboard') 
+                    
+                    except Exception as e:
+                        messages.error(request,e)
+                        return redirect('/dashboard')
+                messages.error(request,'Data not found')
+            return redirect('/dashboard')
+
+# class AddClass(View):
+#     def post(self,post):
+
+
 
 class Login(View):
     def get(self,request):

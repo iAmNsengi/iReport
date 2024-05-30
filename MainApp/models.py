@@ -8,7 +8,6 @@ class Student(models.Model):
     last_name = models.CharField(max_length=100)
     current_class = models.ForeignKey('TheClass',on_delete=models.CASCADE)
     
-
     def __str__(self):
         return self.first_name + " " + self.last_name
 
@@ -26,6 +25,9 @@ class Course(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=10)
     code = models.CharField(max_length=5)
+
+    def __self__(self):
+        return self.title
 
 
 class Data(models.Model):
