@@ -16,7 +16,6 @@ from django.contrib.auth.decorators import login_required
 
 class HomePage(LoginRequiredMixin,View):
     def get(self,request):
-        
         return render(request,'index.html')
     
 class Dashboard(LoginRequiredMixin,View):
@@ -24,25 +23,22 @@ class Dashboard(LoginRequiredMixin,View):
         me = User.objects.filter(username = request.user).first()
         myStudents = Student.objects.filter(creator = me).all()
         my_classes = TheClass.objects.filter(creator = me).all()
-
+        my_courses = Course.objects.filter(creator = me).all()
 
         context ={
             "my_students":myStudents,
             'my_classes':my_classes,
+            'my_courses':my_courses,
         }
         return render(request,'dashboard.html',context)
 
 @login_required
 def AddStudent(request):
-            print('It is getting here')
             if request.method =='POST':
                 fname = request.POST.get('fname')
                 lname = request.POST.get('lname') 
                 current_class = request.POST.get('current_class')
-                print(request)
-                print(lname)
-                print(current_class)
-
+            
                 if current_class:
                     try:
                         class_exist = TheClass.objects.get(code = current_class)
@@ -58,9 +54,31 @@ def AddStudent(request):
                 messages.error(request,'Data not found')
             return redirect('/dashboard')
 
-# class AddClass(View):
-#     def post(self,post):
+@login_required
+def AddCourse(request):
+    if request.method =='POST':
+                name = request.POST.get('name')
+                code = request.POST.get('code') 
 
+                try:
+                        class_exist = Course.objects.get(code = code, title = name)
+                        messages.error(request,'Course already exist!')
+                        return redirect('/dashboard/')                        
+                    
+                except:
+                        me = User.objects.get(username = request.user)
+                        new_course = Course(creator=me,title=name,code=code)
+                        new_course.save()
+                        messages.success(request,'Course added successfully!')
+                        return redirect('/dashboard/') 
+    return redirect('/dashboard')
+
+@login_required
+def AddClass(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        code = request.POST.get('code')
+        classes = request.POST.get('classes')
 
 
 class Login(View):

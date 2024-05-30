@@ -14,8 +14,8 @@ class Student(models.Model):
 
 class TheClass(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=10)
-    code = models.CharField(max_length=5)
+    name = models.CharField(max_length=100)
+    code = models.CharField(max_length=10)
     courses = models.ManyToManyField('Course')
 
     def __str__(self):
@@ -23,8 +23,8 @@ class TheClass(models.Model):
 
 class Course(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=10)
-    code = models.CharField(max_length=5)
+    title = models.CharField(max_length=100)
+    code = models.CharField(max_length=10)                               
 
     def __self__(self):
         return self.title
