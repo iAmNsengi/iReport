@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Student(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    student_id = models.CharField(max_length=10,default='0')
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     current_class = models.ForeignKey('TheClass',on_delete=models.CASCADE)

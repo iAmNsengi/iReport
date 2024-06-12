@@ -20,10 +20,10 @@ class HomePage(LoginRequiredMixin,View):
     
 class Dashboard(LoginRequiredMixin,View):
     def get(self,request):
-        me = User.objects.filter(username = request.user).first()
-        myStudents = Student.objects.filter(creator = me).all()
-        my_classes = TheClass.objects.filter(creator = me).all()
-        my_courses = Course.objects.filter(creator = me).all()
+        logged_in_user = User.objects.filter(username = request.user).first()
+        myStudents = Student.objects.filter(creator = logged_in_user).all()
+        my_classes = TheClass.objects.filter(creator = logged_in_user).all()
+        my_courses = Course.objects.filter(creator = logged_in_user).all()
 
         context ={
             "my_students":myStudents,
@@ -35,6 +35,7 @@ class Dashboard(LoginRequiredMixin,View):
 @login_required
 def AddStudent(request):
             if request.method =='POST':
+                student_id = request.POST.get('student_id')
                 fname = request.POST.get('fname')
                 lname = request.POST.get('lname') 
                 current_class = request.POST.get('current_class')
@@ -42,8 +43,8 @@ def AddStudent(request):
                 if current_class:
                     try:
                         class_exist = TheClass.objects.get(code = current_class)
-                        me = User.objects.get(username = request.user)
-                        new_student = Student(creator=me,first_name=fname,last_name=lname,current_class=class_exist)
+                        logged_in_user = User.objects.get(username = request.user)
+                        new_student = Student(creator=logged_in_user,student_id=student_id,first_name=fname,last_name=lname,current_class=class_exist)
                         new_student.save()
                         messages.success(request,'Student registered successfully!')
                         return redirect('/dashboard') 
@@ -66,8 +67,8 @@ def AddCourse(request):
                         return redirect('/dashboard/')                        
                     
                 except:
-                        me = User.objects.get(username = request.user)
-                        new_course = Course(creator=me,title=name,code=code)
+                        logged_in_user = User.objects.get(username = request.user)
+                        new_course = Course(creator=logged_in_user,title=name,code=code)
                         new_course.save()
                         messages.success(request,'Course added successfully!')
                         return redirect('/dashboard/') 
