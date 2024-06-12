@@ -1,0 +1,32 @@
+{% extends './base.html' %} {% load static %} {% block content %}
+
+<h1>Report for {{ student.first_name }} {{ student.last_name }}</h1>
+<h2>Class: {{ student.current_class.name }}</h2>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Course</th>
+      <th>CAT 1</th>
+      <th>CAT 2</th>
+      <th>FAT</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for record in data_records %}
+    <tr>
+      <td>
+        {{
+        record.student.current_class.courses.get(id=record.student.current_class.courses.id).title
+        }}
+      </td>
+      <td>{{ record.cat1 }}</td>
+      <td>{{ record.cat2 }}</td>
+      <td>{{ record.fat }}</td>
+      <td>{{ record.total }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

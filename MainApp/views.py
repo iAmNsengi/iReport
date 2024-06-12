@@ -12,6 +12,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from urllib.parse import urlparse, parse_qs
 from .models import *
 from django.contrib.auth.decorators import login_required
+from .forms import MarkForm
+
 
 
 class HomePage(LoginRequiredMixin,View):
@@ -79,7 +81,55 @@ def AddClass(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         code = request.POST.get('code')
-        classes = request.POST.get('classes')
+        course_ids = request.POST.getlist('courses')
+
+        try:
+            class_exist = TheClass.objects.get(code=code)
+            messages.error(request, 'Class with this code already exists!')
+            return redirect('/dashboard/')
+        except TheClass.DoesNotExist:
+            logged_in_user = User.objects.get(username=request.user)
+            new_class = TheClass(creator=logged_in_user, name=name, code=code)
+            new_class.save()
+
+            for course_id in course_ids:
+                course = Course.objects.get(id=course_id)
+                new_class.courses.add(course)
+
+            new_class.save()
+            messages.success(request, 'Class added successfully!')
+            return redirect('/dashboard/')
+    return redirect('/dashboard/')
+
+
+@login_required
+def add_marks(request):
+    if request.method == 'POST':
+        form = MarkForm(request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Marks added successfully!')
+            return redirect('/dashboard')
+        else:
+            messages.error(request, 'Error in form submission')
+    else:
+        form = MarkForm(user=request.user)
+    
+    return render(request, 'add_marks.html', {'form': form})
+
+class StudentReport(LoginRequiredMixin, View):
+    def get(self, request, student_id):
+        student = Student.objects.get(id=student_id)
+        data_records = Data.objects.filter(student=student)
+        courses = student.current_class.courses.all()
+
+        context = {
+            'student': student,
+            'data_records': data_records,
+            'courses': courses,
+        }
+        return render(request, 'student_report.html', context)
+
 
 
 class Login(View):
