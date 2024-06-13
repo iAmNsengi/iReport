@@ -110,7 +110,7 @@ def add_marks(request):
             form.save()
             messages.success(request, 'Marks added successfully!')
             return redirect('/dashboard')
-        else:
+        else: 
             messages.error(request, 'Error in form submission')
     else:
         form = MarkForm(user=request.user)

@@ -1,32 +1,49 @@
-{% extends './base.html' %} {% load static %} {% block content %}
+{% extends 'dashboard_base.html' %} {% block dashboard %}
+<section
+  class="flex bg-gray-100 min-h-screen"
+  x-data="{panel:false, menu:true}"
+>
+  {% include 'aside.html' %}
+  <div class="mx-auto w-1/2 my-10">
+    <h1><b>Student: </b> {{ student.first_name }} {{ student.last_name }}</h1>
+    <h2><b>Class: </b> {{ student.current_class.name }}</h2>
 
-<h1>Report for {{ student.first_name }} {{ student.last_name }}</h1>
-<h2>Class: {{ student.current_class.name }}</h2>
+    <div class="relative overflow-x-auto">
+      <table
+        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 my-6"
+      >
+        <thead
+          class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+        >
+          <tr>
+            <th scope="col" class="px-6 py-3">Course</th>
+            <th scope="col" class="px-6 py-3">CAT 1</th>
+            <th scope="col" class="px-6 py-3">CAT 2</th>
+            <th scope="col" class="px-6 py-3">FAT</th>
+            <th scope="col" class="px-6 py-3">Total</th>
+          </tr>
+          <tr></tr>
+        </thead>
+        <tbody>
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            {% for record in data_records %}
 
-<table border="1">
-  <thead>
-    <tr>
-      <th>Course</th>
-      <th>CAT 1</th>
-      <th>CAT 2</th>
-      <th>FAT</th>
-      <th>Total</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for record in data_records %}
-    <tr>
-      <td>
-        {{
-        record.student.current_class.courses.get(id=record.student.current_class.courses.id).title
-        }}
-      </td>
-      <td>{{ record.cat1 }}</td>
-      <td>{{ record.cat2 }}</td>
-      <td>{{ record.fat }}</td>
-      <td>{{ record.total }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            >
+              {{record.course}}
+            </th>
+            <td class="px-6 py-4">{{ record.cat1 }}</td>
+            <td class="px-6 py-4">{{ record.cat2 }}</td>
+            <td class="px-6 py-4">{{ record.fat }}</td>
+            <td class="px-6 py-4">{{ record.total }}</td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
 {% endblock %}
