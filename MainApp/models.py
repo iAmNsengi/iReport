@@ -34,7 +34,11 @@ class Course(models.Model):
 class Data(models.Model):
     student = models.ForeignKey(Student,on_delete=models.CASCADE)
     course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True,blank=True)
-    cat1 = models.FloatField()
-    cat2 =models.FloatField()
-    fat = models.FloatField()
-    total = models.FloatField()
+    cat1 = models.FloatField(default=0.0)
+    cat2 =models.FloatField(default=0.0)
+    fat = models.FloatField(default=0.0)
+    total = models.FloatField(default=0.0)
+
+    def save(self, *args, **kwargs):
+        self.total = self.cat1 + self.cat2 + self.fat
+        super(Data, self).save(*args, **kwargs)

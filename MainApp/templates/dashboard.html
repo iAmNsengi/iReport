@@ -1,13 +1,10 @@
-{% extends 'dashboard_base.html' %} 
-
-{% block dashboard %}
+{% extends 'dashboard_base.html' %} {% block dashboard %}
 <section
   class="flex bg-gray-100 min-h-screen"
   x-data="{panel:false, menu:true}"
 >
+  {% include 'aside.html' %}
 
-{% include 'aside.html' %}
- 
   <div class="flex-grow text-gray-800">
     <main class="p-6 sm:p-10 space-y-6">
       <div
@@ -29,12 +26,12 @@
             <i class="fa-solid fa-plus"></i> &nbsp; Add Student
           </button>
           <button
-            data-modal-target="class-modal"
-            data-modal-toggle="class-modal"
+            data-modal-target="mark-modal"
+            data-modal-toggle="mark-modal"
             class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             type="button"
           >
-            <i class="fa-solid fa-plus"></i> &nbsp; Create new Class
+            <i class="fa-solid fa-plus"></i> &nbsp; Add Student Mark
           </button>
           <button
             data-modal-target="course-modal"
