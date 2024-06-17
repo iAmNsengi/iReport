@@ -112,6 +112,21 @@ class Marks(LoginRequiredMixin,View):
         }
         return render(request,'my_students.html',context)
      
+     def post(self,request):
+        query = request.POST.get('q')
+        data = Student.objects.filter(student_id__contains = query).all()
+        logged_in_user = User.objects.get(username =request.user)
+        my_students = Student.objects.filter(creator = logged_in_user).order_by('student_id')
+       
+        context ={
+             'my_students':my_students,
+             'data':data,
+        }
+
+        return render(request,'my_students.html',context)
+
+     
+     
 
      
 
