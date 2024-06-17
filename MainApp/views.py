@@ -102,6 +102,17 @@ def AddClass(request):
     return redirect('/dashboard/')
 
 
+class Marks(LoginRequiredMixin,View):
+     def get(self,request):
+        logged_in_user = User.objects.get(username =request.user)
+        context ={
+             ''
+        }
+        return render(request,'marks.html')
+     
+
+     
+
 @login_required
 def add_marks(request):
     if request.method == 'POST':
@@ -167,7 +178,7 @@ class Signup(View):
             try:
                 User.objects.get(username = username)
                 messages.error(request,f'User already exist!\nTry to signin!')
-                return redirect('/signup')
+                return redirect('/signup') 
             except Exception as e:
                 try:
                     user = User.objects.create_user(username=username,password=password,email=email,first_name=fname,last_name=lname)
