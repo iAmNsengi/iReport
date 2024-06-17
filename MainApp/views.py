@@ -152,11 +152,15 @@ class StudentReport(LoginRequiredMixin, View):
         student = Student.objects.get(student_id=student_id)
         data_records = Data.objects.filter(student=student)
         courses = student.current_class.courses.all()
+        sum_of_marks = 0
+        for data in data_records:
+             sum_of_marks += data.total
 
         context = {
             'student': student,
             'data_records': data_records,
             'courses': courses,
+            'sum_of_marks':sum_of_marks
         }
         return render(request, 'student_report.html', context)
 

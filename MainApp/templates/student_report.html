@@ -47,6 +47,11 @@
             <td class="px-6 py-4">{{ record.total }}</td>
           </tr>
           {% endfor %}
+          <tr class="bg-black border-b dark:bg-gray-800 dark:border-gray-700">
+            <td scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" colspan="5"><b>TOTAL</b></td>
+            <td>{{sum_of_marks}}</td>
+          </tr>
         </tbody>
       </table>
     </div>
