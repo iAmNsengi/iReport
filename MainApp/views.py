@@ -142,11 +142,6 @@ def add_marks(request):
             messages.error(request,e)  
             return redirect('/dashboard')
 
-
-        return redirect('/dashboard')
-        
-    
-
 class StudentReport(LoginRequiredMixin, View):
     def get(self, request, student_id):
         student = Student.objects.get(student_id=student_id)
