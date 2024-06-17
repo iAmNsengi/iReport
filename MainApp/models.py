@@ -40,5 +40,5 @@ class Data(models.Model):
     total = models.FloatField(default=0.0)
 
     def save(self, *args, **kwargs):
-        self.total = self.cat1 + self.cat2 + self.fat
+        self.total = float(self.cat1) + float(self.cat2) + float(self.fat)
         super(Data, self).save(*args, **kwargs)

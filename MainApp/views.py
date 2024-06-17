@@ -118,21 +118,38 @@ class Marks(LoginRequiredMixin,View):
 @login_required
 def add_marks(request):
     if request.method == 'POST':
-        form = MarkForm(request.POST, user=request.user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Marks added successfully!')
+        student_id = request.POST.get('student_id')
+        course_id = request.POST.get('course')
+        cat1 = request.POST.get('cat1')         
+        cat2 = request.POST.get('cat2')         
+        fat = request.POST.get('fat')
+        try:
+            logged_in_user  = User.objects.get(username = request.user)
+            student = Student.objects.get(student_id = student_id)
+            course = Course.objects.get(code = course_id, creator = logged_in_user)
+            data_exist = Data.objects.filter(student=student,course=course).first()
+
+            if data_exist:
+                messages.error(request,'Data Already exist')
+                return redirect('/dashboard')
+            
+            new_data = Data(student=student,course=course,cat1=cat1,cat2=cat2,fat=fat)
+            new_data.save()
+            messages.success(request,'Student Data recorded successfully!')
             return redirect('/dashboard')
-        else: 
-            messages.error(request, 'Error in form submission')
-    else:
-        form = MarkForm(user=request.user)
+
+        except Exception as e:
+            messages.error(request,e)  
+            return redirect('/dashboard')
+
+
+        return redirect('/dashboard')
+        
     
-    return render(request, 'add_marks.html', {'form': form})
 
 class StudentReport(LoginRequiredMixin, View):
     def get(self, request, student_id):
-        student = Student.objects.get(id=student_id)
+        student = Student.objects.get(student_id=student_id)
         data_records = Data.objects.filter(student=student)
         courses = student.current_class.courses.all()
 

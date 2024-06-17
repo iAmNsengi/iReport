@@ -7,6 +7,7 @@ urlpatterns = [
     path('add-course/',AddCourse),
     path('dashboard/', Dashboard.as_view()),
     path('dashboard/my_students', Marks.as_view()),
+    path('dashboard/add_mark', add_marks),
     path('dashboard/report/<int:student_id>/', StudentReport.as_view(), name='student_report'),
     path('login/', Login.as_view()),
     path('signup/', Signup.as_view()),

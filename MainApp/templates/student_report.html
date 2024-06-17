@@ -7,6 +7,7 @@
   <div class="mx-auto w-1/2 my-10">
     <h1><b>Student: </b> {{ student.first_name }} {{ student.last_name }}</h1>
     <h2><b>Class: </b> {{ student.current_class.name }}</h2>
+    <h2><b>Student Id: </b> {{ student.student_id }}</h2>
 
     <div class="relative overflow-x-auto">
       <table
@@ -16,7 +17,8 @@
           class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
         >
           <tr>
-            <th scope="col" class="px-6 py-3">Course</th>
+            <th scope="col" class="px-6 py-3">Course Code</th>
+            <th scope="col" class="px-6 py-3">Course Title</th>
             <th scope="col" class="px-6 py-3">CAT 1</th>
             <th scope="col" class="px-6 py-3">CAT 2</th>
             <th scope="col" class="px-6 py-3">FAT</th>
@@ -24,22 +26,26 @@
           </tr>
           <tr></tr>
         </thead>
-        <tbody>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            {% for record in data_records %}
+          {% for record in data_records %}
 
+          <tr class="bg-black border-b dark:bg-gray-800 dark:border-gray-700">
             <th
               scope="row"
               class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
-              {{record.course}}
+              {{record.course.code}}
+            </th>
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            >
+              {{record.course.title}}
             </th>
             <td class="px-6 py-4">{{ record.cat1 }}</td>
             <td class="px-6 py-4">{{ record.cat2 }}</td>
             <td class="px-6 py-4">{{ record.fat }}</td>
             <td class="px-6 py-4">{{ record.total }}</td>
           </tr>
-
           {% endfor %}
         </tbody>
       </table>
