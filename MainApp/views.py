@@ -105,10 +105,12 @@ def AddClass(request):
 class Marks(LoginRequiredMixin,View):
      def get(self,request):
         logged_in_user = User.objects.get(username =request.user)
+        my_students = Student.objects.filter(creator = logged_in_user).order_by('student_id')
+       
         context ={
-             ''
+             'my_students':my_students
         }
-        return render(request,'marks.html')
+        return render(request,'my_students.html',context)
      
 
      
