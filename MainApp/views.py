@@ -12,7 +12,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from urllib.parse import urlparse, parse_qs
 from .models import *
 from django.contrib.auth.decorators import login_required
-from .forms import MarkForm
 
 
 
@@ -124,11 +123,7 @@ class Marks(LoginRequiredMixin,View):
         }
 
         return render(request,'my_students.html',context)
-
-     
-     
-
-     
+      
 
 @login_required
 def add_marks(request):
@@ -157,6 +152,7 @@ def add_marks(request):
             messages.error(request,e)  
             return redirect('/dashboard')
 
+
 class StudentReport(LoginRequiredMixin, View):
     def get(self, request, student_id):
         student = Student.objects.get(student_id=student_id)
@@ -173,7 +169,6 @@ class StudentReport(LoginRequiredMixin, View):
             'sum_of_marks':sum_of_marks
         }
         return render(request, 'student_report.html', context)
-
 
 
 class Login(View):
@@ -221,6 +216,7 @@ class Signup(View):
                 except Exception as e:
                     messages.error(request,e)
                     return redirect('/signup')
+    
     
 def Logout(request):
     logout(request)
