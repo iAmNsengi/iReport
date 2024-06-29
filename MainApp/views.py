@@ -121,7 +121,6 @@ class Marks(LoginRequiredMixin,View):
              'my_students':my_students,
              'data':data,
         }
-
         return render(request,'my_students.html',context)
       
 
